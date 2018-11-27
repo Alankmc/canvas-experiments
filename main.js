@@ -7,8 +7,14 @@ canvas.height = yEdge;
 const myCircle = new Circle(200, 400, 20, 0.8);
 const g = 0.9;
 const k = 0.0005;
-
-function Circle(x, y, r, bounce) {
+const COLORS = [
+  '#B9121B',
+  '#4C1B1B',
+  '#F6E497',
+  '#FCFAE1',
+  '#BD8D46',
+]
+function Circle(x, y, r, bounce, color) {
   this.x = x;
   this.y = y;
   this.dx = 0;
@@ -17,6 +23,7 @@ function Circle(x, y, r, bounce) {
   this.ddy = 0;
   this.r = r;
   this.bounce = bounce;
+  this.color = color;
 
   this.getCoords = () => ({x: this.x, y: this.y});
 
@@ -34,7 +41,8 @@ function Circle(x, y, r, bounce) {
   this.draw = () => {
     c.beginPath();
     c.arc(this.x, this.y, this.r,  0, Math.PI * 2, false);
-    c.strokeStyle = 'blue';
+    c.fillStyle = this.color;
+    c.fill();
     c.stroke();
   }
 
@@ -68,26 +76,35 @@ function Circle(x, y, r, bounce) {
   }
 }
 
+const circles = [];
+for (var i = 0; i < 200; i++) {
+  circles.push(new Circle(
+    xEdge * Math.random() - 50,
+    yEdge * Math.random() - 50, 
+    Math.floor(50 - Math.random() * 30),
+    1 - 0.3 * Math.random(),
+    COLORS[Math.floor(COLORS.length * Math.random())]
+  ));
+}
 
 function myClick(e) {
   const x = e.clientX;
   const y = e.clientY;
-  const dampen = 10;
-  const currPos = myCircle.getCoords();
-  myCircle.setVelocities(
-    (x - currPos.x) / dampen,
-    (y - currPos.y) / dampen
-  );
+  const dampen = 9;
+  
+  circles.forEach(el => el.setVelocities(
+    (x - el.getCoords().x) / dampen,
+    (y - el.getCoords().y) / dampen
+  ));
 };
 canvas.addEventListener('click', myClick);
 
 const c = canvas.getContext('2d');
 
-
 function animate() {
   requestAnimationFrame(animate);
   c.clearRect(0, 0, xEdge, yEdge);
-  myCircle.update();
+  circles.forEach(el => el.update());
 }
 
 
