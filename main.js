@@ -99,7 +99,7 @@ function myClick(e) {
     newR,
     1 - 0.6 * p,
     // COLORS[Math.floor(COLORS.length * Math.random())],
-    Math.floor(Math.random()*16777215).toString(16),
+    `#${Math.floor(Math.random()*16777215).toString(16)}`,
     (x - newR) / dampen, 
     (y - (yEdge - newR)) / dampen
   ));
