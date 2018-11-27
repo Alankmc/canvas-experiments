@@ -14,11 +14,11 @@ const COLORS = [
   '#FCFAE1',
   '#BD8D46',
 ]
-function Circle(x, y, r, bounce, color) {
+function Circle(x, y, r, bounce, color, dx = 0, dy = 0) {
   this.x = x;
   this.y = y;
-  this.dx = 0;
-  this.dy = 0;
+  this.dx = dx;
+  this.dy = dy;
   this.ddx = 0;
   this.ddy = 0;
   this.r = r;
@@ -77,24 +77,31 @@ function Circle(x, y, r, bounce, color) {
 }
 
 const circles = [];
-for (var i = 0; i < 200; i++) {
-  circles.push(new Circle(
-    xEdge * Math.random() - 50,
-    yEdge * Math.random() - 50, 
-    Math.floor(50 - Math.random() * 30),
-    1 - 0.3 * Math.random(),
-    COLORS[Math.floor(COLORS.length * Math.random())]
-  ));
-}
+// for (var i = 0; i < 200; i++) {
+//   circles.push(new Circle(
+//     xEdge * Math.random() - 50,
+//     yEdge * Math.random() - 50, 
+//     Math.floor(50 - Math.random() * 30),
+//     1 - 0.3 * Math.random(),
+//     COLORS[Math.floor(COLORS.length * Math.random())]
+//   ));
+// }
 
 function myClick(e) {
   const x = e.clientX;
   const y = e.clientY;
-  const dampen = 9;
-  
-  circles.forEach(el => el.setVelocities(
-    (x - el.getCoords().x) / dampen,
-    (y - el.getCoords().y) / dampen
+  const p = Math.random();
+  const newR = 10 + p * 90;
+  const dampen = 11 + 15 * p;
+  circles.push(new Circle(
+    newR,
+    yEdge - newR,
+    newR,
+    1 - 0.6 * p,
+    // COLORS[Math.floor(COLORS.length * Math.random())],
+    Math.floor(Math.random()*16777215).toString(16),
+    (x - newR) / dampen, 
+    (y - (yEdge - newR)) / dampen
   ));
 };
 canvas.addEventListener('click', myClick);
